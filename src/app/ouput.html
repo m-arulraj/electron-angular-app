@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications by Version</title>
+    <style>
+        /* Style to make tables appear attached to each other */
+        .table-container {
+            display: flex;
+            justify-content: flex-start; /* Aligns tables next to each other */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 300px;
+            margin: 0; /* Remove any space between tables */
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Impacted Versions and Applications</h2>
+
+    <div class="table-container">
+        <!-- Version 1.2.0 Table -->
+        <div>
+            
+            <table>
+                <thead>
+                    <tr><th colspan="2">Version: 1.2.0</th></tr>
+                    <tr>
+                        <th>Application Name</th>
+                        <th>Team</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>App1</td>
+                        <td>Team A</td>
+                    </tr>
+                    <tr>
+                        <td>App2</td>
+                        <td>Team B</td>
+                    </tr>
+                    <tr>
+                        <td>App2</td>
+                        <td>Team B</td>
+                    </tr>
+                    <tr>
+                        <td>App2</td>
+                        <td>Team B</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Version 1.3.0 Table -->
+        <div>
+            
+            <table>
+                <thead>
+                    <tr><th colspan="2">Version: 1.3.0</th></tr>
+                    <tr>
+                        <th>Application Name</th>
+                        <th>Team</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>App1</td>
+                        <td>Team A</td>
+                    </tr>
+                    <tr>
+                        <td>App3</td>
+                        <td>Team C</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            
+            <table>
+                <thead>
+                    <tr><th colspan="2">Version: 1.3.1</th></tr>
+                    <tr>
+                        <th>Application Name</th>
+                        <th>Team</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>App1</td>
+                        <td>Team A</td>
+                    </tr>
+                    <tr>
+                        <td>App3</td>
+                        <td>Team C</td>
+                    </tr>
+                    <tr>
+                        <td>App3</td>
+                        <td>Team C</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
