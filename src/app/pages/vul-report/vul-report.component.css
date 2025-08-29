@@ -1,0 +1,9 @@
+/* Optional styling for the VUL Report component */
+.card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-control[readonly] {
+  background-color: #f8f9fa;
+}

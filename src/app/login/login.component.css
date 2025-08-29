@@ -1,0 +1,48 @@
+/* Custom Login Card Styles */
+.card {
+  border-radius: 8px;
+}
+
+.card-header {
+  border-radius: 8px 8px 0 0;
+}
+
+.card-footer {
+  border-radius: 0 0 8px 8px;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+input.form-control {
+  border-radius: 5px;
+  box-shadow: none;
+  border: 1px solid #ddd;
+}
+
+input.form-control:focus {
+  border-color: #4b8df8;
+  box-shadow: 0 0 5px rgba(75, 141, 248, 0.6);
+}
+
+small {
+  color: #6c757d;
+}
+
+.form-check-label {
+  font-size: 0.875rem;
+}
+
+a.small {
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+a.small:hover {
+  text-decoration: underline;
+}

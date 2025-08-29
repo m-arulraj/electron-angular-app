@@ -1,9 +1,12 @@
-<div style="display: flex;">
-    <div style="display: inline-block;width: 20%;">
-        <app-sidenav></app-sidenav>
-    </div>
+<div *ngIf="isAuthenticated"><div class="app-container">
+  <app-sidenav [class.open]="sidebarOpen"></app-sidenav>
 
-    <div style="display: inline-block;width: 80%;">
-        <router-outlet />
-    </div>
+  <main class="main-content">
+    <button class="btn btn-primary d-md-none toggle-btn" (click)="toggleSidebar()">☰</button>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+</div>
+<div *ngIf="!isAuthenticated">
+  <router-outlet></router-outlet>  <!-- Show login if not authenticated -->
 </div>

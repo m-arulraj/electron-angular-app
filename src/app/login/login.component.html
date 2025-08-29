@@ -1,0 +1,34 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <!-- Login Card -->
+  <div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+    <div class="card-header text-center bg-primary text-white">
+      <h4>Login</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" formControlName="username" required />
+          <div *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid" class="text-danger">
+            Username is required.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" formControlName="password" required />
+          <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="text-danger">
+            Password is required.
+          </div>
+        </div>
+
+        
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+            {{ loading ? 'Logging In...' : 'Login' }}
+          </button>
+        </div>
+      </form>
+    </div>
+    
+  </div>
+</div>

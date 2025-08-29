@@ -1,0 +1,19 @@
+<div class="card" style="max-width: 600px;">
+  <div class="card-header">
+    VUL Report
+  </div>
+  <div class="card-body" [formGroup]="form">
+    <div class="mb-3">
+      <label for="filePath" class="form-label">Enter Fully Qualified File Path</label>
+      <input
+        id="filePath"
+        type="text"
+        formControlName="filePath"
+        class="form-control"
+        placeholder="e.g. C:\Users\JohnDoe\Documents\report.txt"
+      />
+    </div>
+    <button type="button" class="btn btn-primary me-2" (click)="onSubmit()">Submit</button>
+    <button type="button" class="btn btn-secondary" (click)="onClear()">Clear</button>
+  </div>
+</div>

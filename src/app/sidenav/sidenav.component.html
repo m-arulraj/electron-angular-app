@@ -1,20 +1,25 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <svg class="bi me-2 text-white" width="40" height="32">
+<div class="sidebar bg-light text-dark">
+  <div class="d-flex flex-column flex-shrink-0 p-3 vh-100">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2 text-dark" width="40" height="32">
             <use xlink:href="#bootstrap"></use>
         </svg>
-        <span class="fs-4">Utility Tool</span>
+        <span class="fs-4">My Buddy</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item"><a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a></li>
-        <li class="nav-item"><a routerLink="/about" routerLinkActive="active" class="nav-link">About</a></li>
-        <li class="nav-item"><a routerLink="/services" routerLinkActive="active" class="nav-link">Services</a>
+        <li class="nav-item">
+            <a routerLink="/home" routerLinkActive="active" class="nav-link sidenav-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
         </li>
-        <li class="nav-item"><a routerLink="/contact" routerLinkActive="active" class="nav-link">Contact</a>
+        <li class="nav-item"><a routerLink="/crew" routerLinkActive="active" class="nav-link sidenav-link" [routerLinkActiveOptions]="{ exact: true }">Crew</a></li>
+        <!-- New VUL Report Link -->
+        <li class="nav-item">
+            <a routerLink="/vul-report" routerLinkActive="active" class="nav-link sidenav-link" [routerLinkActiveOptions]="{ exact: true }">VUL Report</a>
         </li>
-        <li class="nav-item"><a routerLink="/help" routerLinkActive="active" class="nav-link">Help</a></li>
-        <li class="nav-item"><a routerLink="/crew" routerLinkActive="active" class="nav-link">Crew</a></li>
+        <li class="nav-item mt-3">
+            <button class="btn btn-link text-dark" (click)="logout()">Logout</button>
+        </li>
     </ul>
 
+</div>
 </div>

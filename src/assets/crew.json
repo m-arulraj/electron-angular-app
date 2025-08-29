@@ -1,56 +1,43 @@
-{
-    "crew": [
-        {
-            "name": "Crew1",
-            "shortName": "C1",
-            "members": [
-                {
-                    "name": "Member1",
-                    "role": "Pilot"
-                },
-                {
-                    "name": "Member2",
-                    "role": "Engineer"
-                }
-            ],
-            "project":[
-                {
-                    "name": "ProjectA",
-                    "description": "Exploration of Mars",
-                    "components": ["Rover","Habitat Module"]
-                },
-                {
-                    "name": "ProjectB",
-                    "description": "Lunar Base Construction",
-                    "components": ["Lunar Lander", "Habitat Module"]
-                }
-            ]
-        },
-        {
-            "name": "Crew2",
-            "shortName": "C2",
-            "members": [
-                {
-                    "name": "Member3",
-                    "role": "Navigator"
-                },
-                {
-                    "name": "Member4",
-                    "role": "Scientist"
-                }
-            ],
-            "project":[
-                {
-                    "name": "ProjectC",
-                    "description": "Asteroid Mining",
-                    "components": ["Mining Drone", "Storage Unit"]
-                },
-                {
-                    "name": "ProjectD",
-                    "description": "Space Station Maintenance",
-                    "components": ["Repair Bot", "Supply Module"]
-                }
-            ]
-        }
+[
+  {
+    "id": 1,
+    "name": "Frontend Team Alpha",
+    "projects": [
+      {
+        "name": "Website Redesign",
+        "modules": ["Header", "Footer", "Navigation", "Home Page"]
+      },
+      {
+        "name": "Admin Dashboard",
+        "modules": ["Login", "User Management", "Reports", "Settings"]
+      }
     ]
-}
+  },
+  {
+    "id": 2,
+    "name": "Backend Team Beta",
+    "projects": [
+      {
+        "name": "API Gateway",
+        "modules": ["Routing", "Rate Limiting", "Authentication"]
+      },
+      {
+        "name": "Data Sync",
+        "modules": ["Scheduler", "ETL Jobs", "Monitoring"]
+      }
+    ]
+  },{
+    "id": 3,
+    "name": "Backend Team Beta3",
+    "projects": [
+      {
+        "name": "API Gateway3",
+        "modules": ["Routing3", "Rate Limiting", "Authentication"]
+      },
+      {
+        "name": "Data Sync3",
+        "modules": ["Scheduler3", "ETL Jobs", "Monitoring"]
+      }
+    ]
+  }
+]
