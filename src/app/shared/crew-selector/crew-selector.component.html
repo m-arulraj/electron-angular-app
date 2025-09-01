@@ -1,0 +1,32 @@
+<!-- Crew Dropdown -->
+<div class="mb-3">
+  <label class="form-label">Select Crew</label>
+  <select class="form-select" [value]="value.crewId" (change)="onCrewChange($event)">
+    <option value="">-- Select --</option>
+    <option *ngFor="let crew of crews" [value]="crew.id">{{ crew.name }}</option>
+  </select>
+</div>
+
+<!-- Projects and Modules -->
+<div *ngIf="selectedCrew" class="mt-3">
+  <h5>Projects & Modules</h5>
+  <div *ngFor="let project of selectedCrew.projects" class="mb-3 border p-3 rounded">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" [id]="project.name"
+             [checked]="isProjectSelected(project.name)"
+             (change)="onProjectChange(project.name, project.modules, $event)" />
+      <label class="form-check-label fw-bold" [for]="project.name">{{ project.name }}</label>
+    </div>
+
+    <div class="ms-4 mt-2 d-flex flex-wrap gap-3">
+      <div *ngFor="let module of project.modules">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" [id]="module + '_' + project.name"
+                 [checked]="isModuleSelected(module)"
+                 (change)="onModuleChange(module, project.name, $event)" />
+          <label class="form-check-label" [for]="module + '_' + project.name">{{ module }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

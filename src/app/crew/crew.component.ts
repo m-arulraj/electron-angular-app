@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  FormArray
-} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { CrewService, Crew, CrewProjectSelectionModel, SelectedProject } from '../crew.service';
 import { finalize } from 'rxjs/operators';
+
+import {
+  CrewService,
+  Crew,
+  CrewProjectSelectionModel,
+  SelectedProject
+} from '../crew.service';
+
+import { CrewSelectorComponent, CrewSelectionValue } from '../shared/crew-selector/crew-selector.component';
 
 @Component({
   selector: 'app-crew-project-selector',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, CrewSelectorComponent],
   templateUrl: './crew.component.html',
 })
 export class CrewComponent implements OnInit {
@@ -25,9 +28,11 @@ export class CrewComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private crewService: CrewService) {
     this.form = this.fb.group({
-      crew: [''],
-      selectedProjects: this.fb.control<string[]>([]),
-      selectedModules: this.fb.control<string[]>([]),
+      crewSelection: this.fb.control<CrewSelectionValue>({
+        crewId: null,
+        selectedProjects: [],
+        selectedModules: []
+      }),
       fileType: [''],
       fieldGroups: this.fb.array([]),
       sourceBranch: [''],
@@ -44,10 +49,9 @@ export class CrewComponent implements OnInit {
       if (value === 'JF') {
         this.setDefaultFieldsForJF();
       } else {
-        this.clearDynamicFields(); // Optional: Clear when other types are selected
+        this.clearDynamicFields();
       }
     });
-
   }
 
   ngOnInit() {
@@ -78,121 +82,16 @@ export class CrewComponent implements OnInit {
     this.fieldGroups.push(this.createFieldGroup());
   }
 
-  selectedCrew(): Crew | undefined {
-    const crewId = +this.form.get('crew')?.value;
-    return this.crews.find(c => c.id === crewId);
-  }
+  mapSelectedProjects(selection: CrewSelectionValue): SelectedProject[] {
+    const crew = this.crews.find(c => c.id === selection.crewId);
+    if (!crew) return [];
 
-  onCrewChange() {
-    this.form.get('selectedProjects')?.setValue([]);
-    this.form.get('selectedModules')?.setValue([]);
-  }
-
-  onProjectToggle(projectName: string, modules: string[], checked: boolean): void {
-    console.log('Project toggle:', projectName, checked);
-    const selectedProjects = this.form.get('selectedProjects')?.value || [];
-    const selectedModules = this.form.get('selectedModules')?.value || [];
-
-    if (checked) {
-      if (!selectedProjects.includes(projectName)) {
-        selectedProjects.push(projectName);
-      }
-      for (const module of modules) {
-        if (!selectedModules.includes(module)) {
-          selectedModules.push(module);
-        }
-      }
-    } else {
-      const projIndex = selectedProjects.indexOf(projectName);
-      if (projIndex !== -1) {
-        selectedProjects.splice(projIndex, 1);
-      }
-      for (const module of modules) {
-        const modIndex = selectedModules.indexOf(module);
-        if (modIndex !== -1) {
-          selectedModules.splice(modIndex, 1);
-        }
-      }
-    }
-
-    this.form.get('selectedProjects')?.setValue([...selectedProjects]);
-    this.form.get('selectedModules')?.setValue([...selectedModules]);
-  }
-
-
-  onModuleToggle(module: string, projectName: string, checked: boolean): void {
-    console.log('Module toggle:', module, checked);
-    console.log('Project for module:', projectName);
-
-    const selectedModules = this.form.get('selectedModules')?.value || [];
-    const selectedProjects = this.form.get('selectedProjects')?.value || [];
-
-    // Add or remove the module
-    if (checked) {
-      if (!selectedModules.includes(module)) {
-        selectedModules.push(module);
-      }
-    } else {
-      const index = selectedModules.indexOf(module);
-      if (index !== -1) {
-        selectedModules.splice(index, 1);
-      }
-    }
-
-    const project = this.selectedCrew()?.projects.find(p => p.name === projectName);
-    console.log('Project found:', project);
-
-    const someModulesSelected = project?.modules.some(m => selectedModules.includes(m));
-
-    console.log('All modules selected:', someModulesSelected);
-
-    const projIndex = selectedProjects.indexOf(projectName);
-
-    if (someModulesSelected && projIndex === -1) {
-      selectedProjects.push(projectName);
-      console.log('Project added:', projectName);
-    } else if (!someModulesSelected && projIndex !== -1) {
-      selectedProjects.splice(projIndex, 1);
-      console.log('Project removed:', projectName);
-    }
-
-    this.form.get('selectedModules')?.setValue([...selectedModules]);
-    this.form.get('selectedProjects')?.setValue([...selectedProjects]);
-
-    console.log('Selected Modules:', selectedModules);
-    console.log('Selected Projects:', selectedProjects);
-  }
-
-
-
-  isProjectSelected(projectName: string): boolean {
-    const selectedModules = this.form.get('selectedModules')?.value || [];
-    const project = this.selectedCrew()?.projects.find(p => p.name === projectName);
-    if (!project) return false;
-    // Return true if **any** module from the project is selected
-    return project.modules.some(module => selectedModules.includes(module));
-  }
-
-
-  isModuleSelected(module: string): boolean {
-    return this.form.get('selectedModules')?.value.includes(module);
-  }
-
-  get groupedSelectedProjects(): SelectedProject[] {
-    const selectedModules: string[] = this.form.get('selectedModules')?.value || [];
-    const selectedProjects: string[] = this.form.get('selectedProjects')?.value || [];
-
-    const result: SelectedProject[] = [];
-    const crew = this.selectedCrew();
-    if (!crew) return result;
-
-    for (const project of crew.projects) {
-      if (selectedProjects.includes(project.name)) {
-        const modules = project.modules.filter(m => selectedModules.includes(m));
-        result.push({ projectName: project.name, modules });
-      }
-    }
-    return result;
+    return crew.projects
+      .filter(p => selection.selectedProjects.includes(p.name))
+      .map(p => ({
+        projectName: p.name,
+        modules: p.modules.filter(m => selection.selectedModules.includes(m))
+      }));
   }
 
   onSubmit() {
@@ -200,18 +99,17 @@ export class CrewComponent implements OnInit {
       this.errorMessage = 'Please fill in all required fields correctly.';
       return;
     }
-    console.log('Selected Projects (raw from form control):', this.form.get('selectedProjects')?.value);
-    console.log('Grouped Selected Projects:', this.groupedSelectedProjects);
 
     this.errorMessage = '';
     this.successMessage = '';
     this.loading = true;
 
     const formValue = this.form.value;
-    console.log('Form Data JSON:', JSON.stringify(formValue, null, 2));
+    const crewSelection = formValue.crewSelection;
+
     const model: CrewProjectSelectionModel = {
-      crewId: formValue.crew ? +formValue.crew : null,
-      selectedProjects: this.groupedSelectedProjects,
+      crewId: crewSelection.crewId,
+      selectedProjects: this.mapSelectedProjects(crewSelection),
       fileType: formValue.fileType,
       fieldGroups: formValue.fieldGroups,
       sourceBranch: formValue.sourceBranch,
@@ -221,8 +119,12 @@ export class CrewComponent implements OnInit {
       commitMessage: formValue.commitMessage,
       createPr: formValue.createPr
     };
-    console.log('CrewProjectSelectionModel Data JSON:', JSON.stringify(model, null, 2));
-    /*this.crewService.submitCrewSelection(model)
+
+    console.log('CrewProjectSelectionModel:', model);
+
+    // Uncomment when backend is ready
+    /*
+    this.crewService.submitCrewSelection(model)
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: () => {
@@ -234,12 +136,10 @@ export class CrewComponent implements OnInit {
         error: () => {
           this.errorMessage = 'Failed to submit form. Please try again.';
         }
-      });*/
+      });
+    */
   }
 
-  removeFieldGroup(index: number): void {
-    this.fieldGroups.removeAt(index);
-  }
   setDefaultFieldsForJF(): void {
     this.clearDynamicFields();
 
@@ -249,12 +149,7 @@ export class CrewComponent implements OnInit {
     ];
 
     for (const group of defaultGroups) {
-      this.fieldGroups.push(this.fb.group({
-        field1: [group.field1],
-        field2: [group.field2],
-        field3: [group.field3],
-        field4: [group.field4]
-      }));
+      this.fieldGroups.push(this.fb.group(group));
     }
   }
 
@@ -262,26 +157,30 @@ export class CrewComponent implements OnInit {
     this.fieldGroups.clear();
   }
 
-onClear(): void {
-  // Reset the whole form, optionally set createPr false or default values as needed
-  this.form.reset({
-    crew: '',
-    selectedProjects: [],
-    selectedModules: [],
-    sourceBranch: '',
-    featureBranch: '',
-    jiraId: '',
-    commitMessage: '',
-    createPr: false
-  });
+  removeFieldGroup(index: number): void {
+    this.fieldGroups.removeAt(index);
+  }
 
-  // Clear dynamic fieldGroups and add the initial one
-  this.fieldGroups.clear();
-  this.addFieldGroup();
+  onClear(): void {
+    this.form.reset({
+      crewSelection: {
+        crewId: null,
+        selectedProjects: [],
+        selectedModules: []
+      },
+      fileType: '',
+      sourceBranch: '',
+      featureBranch: '',
+      jiraId: '',
+      checkOutPath: '',
+      commitMessage: '',
+      createPr: false
+    });
 
-  // Clear any success or error messages
-  this.successMessage = '';
-  this.errorMessage = '';
-}
+    this.fieldGroups.clear();
+    this.addFieldGroup();
 
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
 }

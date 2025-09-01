@@ -5,39 +5,8 @@
   <div class="card-body">
     <form [formGroup]="form">
 
-      <!-- Crew Dropdown -->
-      <div class="mb-3">
-        <label for="crew" class="form-label">Select Crew</label>
-        <select class="form-select" formControlName="crew" (change)="onCrewChange()">
-          <option value="">-- Select --</option>
-          <option *ngFor="let crew of crews" [value]="crew.id">{{ crew.name }}</option>
-        </select>
-      </div>
-
-      <!-- Project and Modules -->
-      <div *ngIf="selectedCrew() as crew" class="mt-3">
-        <h5>Projects & Modules</h5>
-        <div *ngFor="let project of crew.projects" class="mb-3 border p-3 rounded">
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" [id]="project.name" #projectCheckbox
-              [checked]="isProjectSelected(project.name)"
-              (change)="onProjectToggle(project.name, project.modules, projectCheckbox.checked)" />
-            <label class="form-check-label fw-bold" [for]="project.name">{{ project.name }}</label>
-          </div>
-
-          <div class="ms-4 mt-2 d-flex flex-wrap gap-3">
-
-          <div  *ngFor="let module of project.modules">
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" [id]="module" #moduleCheckbox
-                [checked]="isModuleSelected(module)"
-                (change)="onModuleToggle(module, project.name, moduleCheckbox.checked)" />
-              <label class="form-check-label" [for]="module">{{ module }}</label>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
+      <!-- Crew Selector Component -->
+      <app-crew-selector  formControlName="crewSelection" [crews]="crews"></app-crew-selector>
       <!-- File Type Dropdown -->
       <div class="mb-3">
         <label class="form-label">File Type</label>
